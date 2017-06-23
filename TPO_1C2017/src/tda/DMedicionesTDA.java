@@ -4,7 +4,7 @@ public interface DMedicionesTDA {
 
 	public void inicializar();
 	
-	public void agregar(int anio, int mes, int dia, float medicion);
+	public void agregar(int anio, int mes, int dia, int medicion);
 	
 	public void eliminarAnio(int anio);
 	
