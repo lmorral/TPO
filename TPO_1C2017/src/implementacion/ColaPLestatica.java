@@ -2,7 +2,7 @@ package implementacion;
 
 import tda.ColaPrioridadInvertidaTDA;
 
-public class ColaPrioridadInvertidaEstatica implements ColaPrioridadInvertidaTDA {
+public class ColaPLestatica implements ColaPrioridadInvertidaTDA {
 	final int MAX=1000;
 	int []valor;
 	int []prioridad;
