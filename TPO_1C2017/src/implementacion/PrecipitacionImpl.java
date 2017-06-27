@@ -67,12 +67,12 @@ public class PrecipitacionImpl implements PrecipitacionesTDA {
 	private void GuardaCampo(ConjuntoStringTDA res, ABBMedicionesTDA arbol){ //recorre arbol y guarda los campos
 		if (!arbol.arbolMedicionesVacio()){
 		res.agregar(arbol.campo());	
-		//if(!arbol.hijoDerecho().arbolMedicionesVacio()){
+		if(!arbol.hijoDerecho().arbolMedicionesVacio()){
 			GuardaCampo(res, arbol.hijoDerecho());
-		//}
-		//if(!arbol.hijoIzquierdo().arbolMedicionesVacio()){
+		}
+		if(!arbol.hijoIzquierdo().arbolMedicionesVacio()){
 			GuardaCampo(res, arbol.hijoIzquierdo());
-		//}
+		}
 		}
 	}
 
