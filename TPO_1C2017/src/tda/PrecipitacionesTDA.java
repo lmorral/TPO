@@ -27,9 +27,9 @@ public interface PrecipitacionesTDA {
 	
 	public ColaPrioridadInvertidaTDA mediciones(String campo, int anio, int mes);
 	
-	public float promedioAnual(String campo, int anio);
+	public int promedioAnual(String campo, int anio);
 	
-	public float promedioMensual(String campo, int anio, int mes);
+	public int promedioMensual(String campo, int anio, int mes);
 	
 	/**
 	 * Devuelve para un campo determinado la sumatoria de precipitaciones de un mes determinado para todos los años.<br>

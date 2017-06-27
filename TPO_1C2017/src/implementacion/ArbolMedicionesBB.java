@@ -3,55 +3,118 @@ package implementacion;
 import tda.ABBMedicionesTDA;
 import tda.DMMedicionesTDA;
 
-public class AbbMediciones implements ABBMedicionesTDA {
-	NodoCampo raiz;
+public class ArbolMedicionesBB implements ABBMedicionesTDA {
+	
+	private NodoCampo primero;
 
-	@Override
 	public void inicializar() {
-		raiz=null;
+		primero=null;
 	}
 
-	@Override
 	public void agregar(String campo, int anio, int mes, int dia, int medicion) {
-		// desarrollar dicc primero
+		if(primero==null)
+		{
+			NodoCampo aux= new NodoCampo();
+			aux.ciudad=campo;
+			aux.hijoI= new ArbolMedicionesBB();
+			aux.hijoI.inicializar();
+			aux.hijoD= new ArbolMedicionesBB();
+			aux.hijoD.inicializar();
+			aux.mediciones= new DiccMulMediciones();
+			aux.mediciones.inicializar();
+			aux.mediciones.agregar(anio, mes, dia, medicion);
+			primero=aux;
+		}
+		else if (campo.compareToIgnoreCase(primero.ciudad)>0)
+		{
+			primero.hijoD.agregar(campo, anio, mes, dia, medicion);
+		}
+		else if (campo.compareToIgnoreCase(primero.ciudad)<0)
+		{
+			primero.hijoI.agregar(campo, anio, mes, dia, medicion);
+		}
 
 	}
 
-	@Override
 	public void eliminar(String campo) {
-		// desaroollar dicc primero
-
+		if(primero != null)
+		{
+			if(primero.ciudad.equalsIgnoreCase(campo) && primero.hijoI.arbolMedicionesVacio() && primero.hijoD.arbolMedicionesVacio())
+			{
+				primero=null;
+			}
+			else if(primero.ciudad.equalsIgnoreCase(campo) && !primero.hijoI.arbolMedicionesVacio())
+			{
+				primero.ciudad = mayor(primero.hijoI);
+				primero.hijoI.eliminar(primero.ciudad);
+			}
+			else if(primero.ciudad.equalsIgnoreCase(campo))
+			{
+				primero.ciudad = menor(primero.hijoD);
+				primero.hijoD.eliminar(primero.ciudad);
+			}
+			else if(primero.ciudad.compareToIgnoreCase(campo)>0)
+			{
+				primero.hijoI.eliminar(campo);
+				
+			}
+			else{
+				primero.hijoD.eliminar(campo);
+			}
+		}
 	}
 
-	@Override
 	public void eliminarMedicionDia(String campo, int anio, int mes, int dia) {
-		// desarrollar dicc primero
-
+		if (primero!=null){
+			if(primero.ciudad.equalsIgnoreCase(campo)){
+				primero.mediciones.eliminarDia(anio, mes, dia);
+			}
+			else if(primero.ciudad.compareToIgnoreCase(campo)>0){
+				primero.hijoI.eliminarMedicionDia(campo, anio, mes, dia);
+			}
+			else{
+				primero.hijoD.eliminarMedicionDia(campo, anio, mes, dia);
+			}
+		}
 	}
 
-	@Override
 	public String campo() {
-		return raiz.campo;
+		return primero.ciudad;
 	}
 
-	@Override
 	public DMMedicionesTDA mediciones() {
-		return raiz.mediciones;
+		return primero.mediciones;
 	}
 
-	@Override
 	public ABBMedicionesTDA hijoIzquierdo() {
-		return raiz.hijoI;
+		return primero.hijoI;
 	}
 
-	@Override
 	public ABBMedicionesTDA hijoDerecho() {
-		return raiz.hijoD;
+		return primero.hijoD;
 	}
 
-	@Override
 	public boolean arbolMedicionesVacio() {
-		return raiz == null;
+		return primero==null;
+	}
+	
+	private String menor(ABBMedicionesTDA arbol) {
+		if(arbol.hijoDerecho().arbolMedicionesVacio()){
+			return arbol.campo();
+		}
+		else{
+			return mayor(arbol.hijoIzquierdo());
+		}
+	}
+
+	private String mayor(ABBMedicionesTDA arbol) {
+
+		if(arbol.hijoDerecho().arbolMedicionesVacio()){
+			return arbol.campo();
+		}
+		else{
+			return mayor(arbol.hijoDerecho());
+		}
 	}
 
 }

@@ -4,7 +4,7 @@ import tda.ABBMedicionesTDA;
 import tda.DMMedicionesTDA;
 
 public class NodoCampo {
-	String campo;
+	String ciudad;
 	DMMedicionesTDA mediciones;
 	ABBMedicionesTDA hijoI;
 	ABBMedicionesTDA hijoD;

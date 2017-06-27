@@ -14,7 +14,7 @@ public interface DMedicionesTDA {
 	
 	public ConjuntoTDA anios();
 	
-	public ConjuntoMesesTDA meses(int anio);
+	public ConjuntoTDA meses(int anio);
 	
 	public ColaTDA mediciones();
 	
