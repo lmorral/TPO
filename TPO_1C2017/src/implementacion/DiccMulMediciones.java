@@ -13,7 +13,7 @@ public class DiccMulMediciones implements DMMedicionesTDA {
 		origen=null;
 	}
 
-	public void agregar(int anio, int mes, int dia, int medicion) {  //CHEQUEAR
+	public void agregar(int anio, int mes, int dia, int medicion) {
 		NodoMedicionesAnio aux= BuscarAnio(anio);
 		if(aux==null){ //no existe anio
 			aux=new NodoMedicionesAnio();
@@ -135,7 +135,7 @@ public class DiccMulMediciones implements DMMedicionesTDA {
 		return res;
 	}
 
-	public DiccionarioSimpleTDA mediciones(int anio, int mes) {
+	public DiccionarioSimpleTDA mediciones(int anio, int mes) { // las claves son los dias y el valor las precipitaciones
 		DiccionarioSimpleTDA res=new DiccSim();
 		res.inicializar();
 		NodoMedicionesAnio auxa=BuscarAnio(anio);

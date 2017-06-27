@@ -12,6 +12,7 @@ public class PrecipitacionImpl implements PrecipitacionesTDA {
 	ABBMedicionesTDA arbol;
 
 	public void inicializar() {
+		arbol = new ArbolMedicionesBB();
 		arbol.inicializar();
 	}
 
@@ -29,45 +30,49 @@ public class PrecipitacionImpl implements PrecipitacionesTDA {
 
 	public int medicionDeUnDia(String campo, int anio, int mes, int dia) { //VER
 		ABBMedicionesTDA aux=BuscarArbol(arbol, campo);
-		DiccionarioSimpleTDA ds= aux.mediciones().mediciones(anio, mes);
+		if (aux!=null){
+			DiccionarioSimpleTDA ds= aux.mediciones().mediciones(anio, mes);
 			int x;
 			x=ds.recuperar(dia);
 			return x;
+		}
+		else
+			return -1; // que devuelvo si no existe
 	}
 	
 	private ABBMedicionesTDA BuscarArbol(ABBMedicionesTDA arbol, String campo){ 
-		if(arbol.campo()==campo)
-			return arbol;
-		else if(arbol.campo().compareToIgnoreCase(campo)>0){
-			return BuscarArbol(arbol.hijoIzquierdo(), campo);
+		if (!arbol.arbolMedicionesVacio()){
+			if(arbol.campo().equalsIgnoreCase(campo))
+				return arbol;
+			else if(arbol.campo().compareToIgnoreCase(campo)>0){
+				return BuscarArbol(arbol.hijoIzquierdo(), campo);
+			}
+			else{
+				return BuscarArbol(arbol.hijoDerecho(), campo);
+			}
 		}
-		else{
-			return BuscarArbol(arbol.hijoDerecho(), campo);
-		}
+		else
+			return null; // el arbol esta vacio o no existe campo
 	}
 
-	public ConjuntoStringTDA campos() { //PROBLEMA RECURSIVIDAD, FALTA HACER QUE PASA SI hijoDerecho e hijoIzquierdo NO estan vacios
+	public ConjuntoStringTDA campos() { 
 		ConjuntoStringTDA res= new ConjuntoStringEstatico();
 		res.inicializar();
 		if (!arbol.arbolMedicionesVacio()){
-			res=GuardaCampo(res, arbol);			
+			GuardaCampo(res, arbol);			
 		}
 		return res;
 	}
 	
-	private ConjuntoStringTDA GuardaCampo(ConjuntoStringTDA res, ABBMedicionesTDA arbol){ //recorre arbol y guarda los campos
-		if(arbol.hijoDerecho().arbolMedicionesVacio() && arbol.hijoIzquierdo().arbolMedicionesVacio()){
-			res.agregar(arbol.campo());
-			return res;
-		}
-		else if(arbol.hijoDerecho().arbolMedicionesVacio() && !arbol.hijoIzquierdo().arbolMedicionesVacio()){
-			return GuardaCampo(res, arbol.hijoIzquierdo());
-		}
-		else if(!arbol.hijoDerecho().arbolMedicionesVacio() && arbol.hijoIzquierdo().arbolMedicionesVacio()){
-			return GuardaCampo(res, arbol.hijoDerecho());
-		}
-		else{ // si el hijoDerecho e hijoIzquierdo NO estan vacios
-			return GuardaCampo(res, arbol.hijoDerecho()); // ESTA MAL TIENE QUE IR POR LOS DOS LADOS (izquierdo y derecho)
+	private void GuardaCampo(ConjuntoStringTDA res, ABBMedicionesTDA arbol){ //recorre arbol y guarda los campos
+		if (!arbol.arbolMedicionesVacio()){
+		res.agregar(arbol.campo());	
+		//if(!arbol.hijoDerecho().arbolMedicionesVacio()){
+			GuardaCampo(res, arbol.hijoDerecho());
+		//}
+		//if(!arbol.hijoIzquierdo().arbolMedicionesVacio()){
+			GuardaCampo(res, arbol.hijoIzquierdo());
+		//}
 		}
 	}
 
@@ -102,7 +107,7 @@ public class PrecipitacionImpl implements PrecipitacionesTDA {
 		int prom=0;
 		ABBMedicionesTDA aux=BuscarArbol(arbol, campo);
 		if(aux!=null){
-			DiccionarioSimpleTDA ds=aux.mediciones().mediciones(mes,anio);
+			DiccionarioSimpleTDA ds=aux.mediciones().mediciones(anio,mes);
 			ConjuntoTDA dias=ds.claves();
 			int x,c=0;
 			while(!dias.conjuntoVacio()){
@@ -111,7 +116,8 @@ public class PrecipitacionImpl implements PrecipitacionesTDA {
 				prom=prom+ds.recuperar(x);
 				c=c+1;
 			}
-			prom=prom/c;
+			if(c>0)
+				prom=prom/c;
 		}
 		return prom;
 	}
